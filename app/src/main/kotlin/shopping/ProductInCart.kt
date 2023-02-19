@@ -1,5 +1,3 @@
 package shopping
 
-class ProductInCart(val product: Product, val price: String, quantity: Int) {
-
-}
+data class ProductInCart(val product: Product, val price: String, val quantity: Int)

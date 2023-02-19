@@ -1,12 +1,15 @@
 package shopping
 
 class ShoppingCartService {
+
+    private var products = listOf<ProductInCart>()
+
     fun getShoppingCart(): ShoppingCart {
-        return ShoppingCart(emptyList(), Money(0.0))
+        return ShoppingCart(products, Money(0.0))
     }
 
-    fun add(iceberg: Product) {
-        TODO("Not Implemented")
+    fun add(product: Product) {
+        this.products += ProductInCart(product, product.price.value.toString(), 1)
     }
 
 }
