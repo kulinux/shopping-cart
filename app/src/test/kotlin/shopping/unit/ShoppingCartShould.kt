@@ -55,4 +55,15 @@ class ShoppingCartShould : FreeSpec({
         actual.products shouldContainOnly listOf(ProductInCart(Iceberg, "2.17", 2))
     }
 
+    "Total product should give the number of element in basket" {
+        every { moneyFormatter.format(Iceberg.price) } returns "2.17"
+
+        shoppingCart.add(Iceberg)
+        shoppingCart.add(Iceberg)
+
+        val actual = shoppingCart.getShoppingCart()
+        actual.totalProduct() shouldBe 2
+
+    }
+
 })
