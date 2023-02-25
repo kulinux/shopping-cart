@@ -2,38 +2,35 @@ package shopping
 
 import shopping.model.Money
 import shopping.model.Product
-import shopping.model.ProductInCart
+import shopping.model.ViewProductInCart
 import shopping.model.ShoppingCart
+import java.util.*
 
 
-class ShoppingCartService(var moneyFormatter: MoneyFormatterService = MoneyFormatterService()) {
+class ShoppingCartService() {
 
-    private var products = listOf<ProductInCart>()
+    private var products = listOf<Product>()
 
     fun getShoppingCart(): ShoppingCart {
-        return ShoppingCart(products, totalPrice())
+        return ShoppingCart(productsInCart(), totalPrice())
+    }
+
+    fun add(product: Product) {
+        this.products = this.products + product
     }
 
     private fun totalPrice(): Money {
-        return products
-            .map { it.product.price }
-            .foldRight(Money.Zero) { total, item -> total + item }
+        return products.foldRight(Money.Zero) { prod, total -> prod.price + total }
     }
 
 
-    fun add(product: Product) {
-        val existingProduct = this.products.find { it.product.name == product.name }
-        val productExcept = this.products.filter { it.product.name != product.name }
-
-        val numberOfExistingProduct = existingProduct?.quantity ?: 0
-
-        this.products =
-            productExcept +
-                    ProductInCart(
-                        product,
-                        moneyFormatter.format(product.price),
-                        numberOfExistingProduct + 1
-                    )
+    private fun productsInCart(): List<ViewProductInCart> {
+        return this.products.groupBy { it.name }.map {
+                val p = it.value[0]
+                ViewProductInCart(p, format(p.price), it.value.size)
+            }
     }
+
+    private fun format(money: Money) = String.format(Locale.ENGLISH, "%.2f", money.value)
 
 }
