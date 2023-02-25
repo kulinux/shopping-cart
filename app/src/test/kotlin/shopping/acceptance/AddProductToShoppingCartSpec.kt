@@ -3,8 +3,8 @@ package shopping.acceptance
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
-import shopping.Product.*
-import shopping.ProductInCart
+import shopping.model.Product.*
+import shopping.model.ProductInCart
 import shopping.ShoppingCartService
 
 class AddProductToShoppingCartSpec : StringSpec({
@@ -25,9 +25,9 @@ class AddProductToShoppingCartSpec : StringSpec({
             listOf(
                 ProductInCart(Iceberg, "2.17", 3),
                 ProductInCart(Tomatoe, "0.73", 1),
-                ProductInCart(Chicken, "1,83", 1),
+                ProductInCart(Chicken, "1.83", 1),
                 ProductInCart(Bread, "0.88", 2),
-                ProductInCart(Corn, "0.88", 2)
+                ProductInCart(Corn, "1.50", 1)
             )
 
         actual.totalProduct() shouldBe 8
