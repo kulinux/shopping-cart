@@ -83,7 +83,6 @@ class ShoppingCartShould : FreeSpec({
 
             val actual = shoppingCart.getShoppingCart()
 
-            val fivePercent = 10.0 / 100 * 2.17
             actual.totalPrice shouldBe "1.95"
         }
     }

@@ -13,31 +13,24 @@ class ShoppingCartService() {
     private var coupon: Coupon? = null
 
     fun getShoppingCart(): ShoppingCart {
-        return ShoppingCart(productsInCart(), coupon?.name ?: "", format(totalPrice()))
+        val formatter = ShoppingCartFormatter()
+        return formatter.format(products, coupon, totalPrice())
     }
 
     fun add(product: Product) {
         this.products = this.products + product
     }
 
-    private fun totalPrice(): Money {
-        val priceCalculator = PriceCalculator()
-        products.forEach { priceCalculator.sum(it.price) }
-        Optional.ofNullable(coupon).ifPresent { priceCalculator.applyDiscount(it.discount) }
-        return priceCalculator.total()
-    }
-
-    private fun productsInCart(): List<ViewProductInCart> {
-        return this.products.groupBy { it.name }.map {
-            val p = it.value[0]
-            ViewProductInCart(p, format(p.price), it.value.size)
-        }
-    }
-
-    private fun format(money: Money) = String.format(Locale.ENGLISH, "%.2f", money.value)
-
     fun applyCoupon(coupon: Coupon) {
         this.coupon = coupon
     }
 
+    private fun totalPrice(): Money {
+        val priceCalculator = PriceCalculator()
+        products.forEach { priceCalculator.sum(it.price) }
+        coupon?.let { priceCalculator.applyDiscount(it.discount) }
+        return priceCalculator.total()
+    }
+
 }
+

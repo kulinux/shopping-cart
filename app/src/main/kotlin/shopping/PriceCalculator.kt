@@ -5,7 +5,7 @@ import shopping.model.Money
 class PriceCalculator {
     private var accumulated: Money = Money.Zero
 
-    fun sum(price: Money): Unit {
+    fun sum(price: Money) {
         accumulated += price
     }
 
