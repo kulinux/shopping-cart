@@ -3,14 +3,16 @@ package shopping.acceptance
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import shopping.Coupon
 import shopping.model.Product.*
 import shopping.model.ViewProductInCart
 import shopping.ShoppingCartService
 import shopping.model.Money
 
-class AddProductToShoppingCartSpec : StringSpec({
-    "Add product to shopping cart" {
+class ApplyCouponToShoppingCartSpec : StringSpec({
+    "Apply discount to the shopping cart" {
         val shoppingCart = ShoppingCartService()
+
         shoppingCart.add(Iceberg)
         shoppingCart.add(Iceberg)
         shoppingCart.add(Iceberg)
@@ -19,6 +21,7 @@ class AddProductToShoppingCartSpec : StringSpec({
         shoppingCart.add(Bread)
         shoppingCart.add(Bread)
         shoppingCart.add(Corn)
+        shoppingCart.applyCoupon(Coupon.PROMO_5)
 
         val actual = shoppingCart.getShoppingCart()
 
@@ -31,7 +34,8 @@ class AddProductToShoppingCartSpec : StringSpec({
                 ViewProductInCart(Corn, "1.50", 1)
             )
 
+        actual.coupon shouldBe "PROMO_5"
         actual.totalProduct() shouldBe 8
-        actual.totalPrice shouldBe "12.33"
+        actual.totalPrice shouldBe "11.71"
     }
 })
